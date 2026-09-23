@@ -1,4 +1,4 @@
-# TypeSafe.Jev .NET Wrapper
+# Zilpio.TypeSafe.Jev .NET Wrapper
 
 An independent .NET wrapper for [Jev / TypeSafe System One](https://docs.typesafe.ai/api). It is not an official TypeSafe AI SDK.
 
@@ -9,13 +9,13 @@ Jev evaluates text against typed questions. This wrapper exposes `IJevService` w
 Install the package from NuGet in Visual Studio's NuGet Package Manager, or run one of these commands from your project directory:
 
 ```sh
-dotnet add package Zilpione.TypeSafe.Jev
+dotnet add package Zilpio.TypeSafe.Jev
 ```
 
 In Visual Studio's Package Manager Console, run:
 
 ```powershell
-Install-Package Zilpione.TypeSafe.Jev
+Install-Package Zilpio.TypeSafe.Jev
 ```
 
 The package supports .NET 6 and later, plus .NET Standard 2.0 consumers. This makes it usable from .NET Framework 4.6.1 and later; Microsoft recommends .NET Framework 4.7.2 or later for .NET Standard 2.0 libraries. Get a TypeSafe API key from the [TypeSafe dashboard](https://console.typesafe.ai/). Your application decides how to obtain the key; do not commit a real key.
@@ -107,7 +107,7 @@ Levels are ordered from low to high (2 to 10). `Value` is a probability-weighted
 
 ## Package
 
-Package ID: `Zilpione.TypeSafe.Jev`. Install it through NuGet using one of the commands above.
+Package ID: `Zilpio.TypeSafe.Jev`. Install it through NuGet using one of the commands above.
 
 To build the package from source:
 

@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageId>Zilpione.TypeSafe.Jev</PackageId>
-    <Title>TypeSafe.Jev .NET Wrapper</Title>
+    <PackageId>Zilpio.TypeSafe.Jev</PackageId>
+    <Title>Zilpio TypeSafe.Jev .NET Wrapper</Title>
     <Version>0.1.0</Version>
     <Authors>Zilpione</Authors>
     <Description>A minimal .NET wrapper for Jev (TypeSafe System One API).</Description>
