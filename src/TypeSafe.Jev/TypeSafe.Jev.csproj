@@ -7,7 +7,7 @@
     <PackageId>Zilpione.TypeSafe.Jev</PackageId>
     <Version>0.1.0</Version>
     <Authors>Zilpione</Authors>
-    <Description>Minimal .NET client for the TypeSafe System One API.</Description>
+    <Description>A minimal .NET wrapper for Jev (TypeSafe System One API).</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Zilpione/typesafe-jev-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

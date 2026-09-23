@@ -1,6 +1,6 @@
-# TypeSafe.Jev for .NET
+# Jev .NET wrapper
 
-An independent, minimal .NET client for the [TypeSafe System One API](https://docs.typesafe.ai/api). This project is not affiliated with TypeSafe AI.
+A minimal .NET wrapper for Jev, TypeSafe's [System One API](https://docs.typesafe.ai/api). This project is independent and not affiliated with TypeSafe AI.
 
 ```csharp
 using TypeSafe.Jev;
