@@ -6,19 +6,19 @@ Jev evaluates text against typed questions. This wrapper exposes `IJevService` w
 
 ## Setup
 
-Reference `src/TypeSafe.Jev/TypeSafe.Jev.csproj` from your .NET project. Get a TypeSafe API key from the [TypeSafe dashboard](https://console.typesafe.ai/). Put it in User Secrets, an environment variable (`TypeSafe__ApiKey`), or your secret store; do not commit it.
+Reference `src/TypeSafe.Jev/TypeSafe.Jev.csproj` from your .NET project. Get a TypeSafe API key from the [TypeSafe dashboard](https://console.typesafe.ai/). Your application decides how to obtain the key; do not commit a real key.
 
-Register the typed client once in `Program.cs`:
+Register the typed client once in `Program.cs`, passing the **actual API key value** in `apiKey`:
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
 using TypeSafe.Jev;
 
-builder.Services.AddJevService(
-    builder.Configuration["TypeSafe:ApiKey"]
-    ?? throw new InvalidOperationException("TypeSafe:ApiKey is missing."));
+builder.Services.AddJevService(apiKey);
 builder.Services.AddScoped<MessageAnalyzer>();
 ```
+
+`"TypeSafe:ApiKey"` is a possible configuration *key name*, not the API key value. Passing that literal string would send it as a Bearer token. `AddJevService` rejects a null, empty, or whitespace API key immediately with `ArgumentException`; a nonempty but invalid key is rejected by TypeSafe when you call the API.
 
 `AddJevService` registers `IJevService` as a **transient typed HTTP client** through `IHttpClientFactory`. The factory manages HTTP handlers; do not also register `IJevService` as scoped or singleton. Inject it into your controller or scoped/transient application service:
 
