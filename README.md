@@ -93,10 +93,9 @@ Levels are ordered from low to high (2 to 10). `Value` is a probability-weighted
 
 `TypeSafeClient.EvaluateAsync` remains available for advanced requests, including several questions in one API call. It accepts a state and the raw named question payload, then returns a `JsonDocument`. Dispose that document after reading it. The typed `IJevService` methods above cover ordinary single-question calls.
 
-## Build
+## Package
 
 ```sh
-dotnet test tests/TypeSafe.Jev.Tests/TypeSafe.Jev.Tests.csproj
 dotnet pack src/TypeSafe.Jev/TypeSafe.Jev.csproj -c Release
 ```
 
