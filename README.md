@@ -6,25 +6,45 @@ Jev evaluates text against typed questions. This wrapper exposes `IJevService` w
 
 ## Setup
 
-Reference `src/TypeSafe.Jev/TypeSafe.Jev.csproj` from your .NET project. Get a TypeSafe API key from the [TypeSafe dashboard](https://console.typesafe.ai/) and keep it in an environment variable or your application's secret store. The key is never part of the request models.
+Reference `src/TypeSafe.Jev/TypeSafe.Jev.csproj` from your .NET project. Get a TypeSafe API key from the [TypeSafe dashboard](https://console.typesafe.ai/). Put it in User Secrets, an environment variable (`TypeSafe__ApiKey`), or your secret store; do not commit it.
 
-Create one `HttpClient` and one service instance; reuse both across calls:
+Register the typed client once in `Program.cs`:
 
 ```csharp
+using Microsoft.Extensions.DependencyInjection;
 using TypeSafe.Jev;
 
-var apiKey = Environment.GetEnvironmentVariable("TYPESAFE_API_KEY")
-    ?? throw new InvalidOperationException("TYPESAFE_API_KEY is missing.");
-using var http = new HttpClient();
-IJevService jev = new JevService(apiKey, http);
+builder.Services.AddJevService(
+    builder.Configuration["TypeSafe:ApiKey"]
+    ?? throw new InvalidOperationException("TypeSafe:ApiKey is missing."));
+builder.Services.AddScoped<MessageAnalyzer>();
 ```
 
-The caller owns `HttpClient`. In ASP.NET Core, register `JevService` as a typed HTTP client and read the key from configuration. Each method also accepts an optional `CancellationToken`.
+`AddJevService` registers `IJevService` as a **transient typed HTTP client** through `IHttpClientFactory`. The factory manages HTTP handlers; do not also register `IJevService` as scoped or singleton. Inject it into your controller or scoped/transient application service:
+
+```csharp
+public sealed class MessageAnalyzer
+{
+    private readonly IJevService _jev;
+
+    public MessageAnalyzer(IJevService jev) => _jev = jev;
+
+    public async Task<double> UrgencyAsync(string message, CancellationToken cancellationToken)
+    {
+        var answer = await _jev.Noul(
+            new NoulRequest(message, "Does this message express urgency?"),
+            cancellationToken);
+        return answer.Probability;
+    }
+}
+```
+
+The following examples use `_jev` inside a class that receives `IJevService` through its constructor. Each method accepts an optional `CancellationToken`.
 
 ## Noul: yes/no probability
 
 ```csharp
-var answer = await jev.Noul(new NoulRequest(
+var answer = await _jev.Noul(new NoulRequest(
     State: "Please call me back today; this is urgent.",
     Instructions: "Does the message express urgency?"));
 
@@ -37,7 +57,7 @@ bool isUrgent = probabilityOfYes >= 0.8;        // choose your own threshold
 ## Choice: pick one option
 
 ```csharp
-var answer = await jev.Choice(new ChoiceRequest(
+var answer = await _jev.Choice(new ChoiceRequest(
     State: "The app closes when I open settings.",
     Instructions: "Which team should handle this message?",
     Options: new List<ChoiceOption>
@@ -57,7 +77,7 @@ Each `ChoiceOption` has a unique key and a description. `Value` is the selected 
 ## Score: rate ordered levels
 
 ```csharp
-var answer = await jev.Score(new ScoreRequest(
+var answer = await _jev.Score(new ScoreRequest(
     State: "The issue affects most users and has lasted several hours.",
     Instructions: "How severe is the issue?",
     Levels: new List<string> { "Minor inconvenience", "Partial outage", "Major outage" }));

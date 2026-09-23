@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using TypeSafe.Jev;
 using Xunit;
 
@@ -7,6 +8,24 @@ namespace TypeSafe.Jev.Tests;
 
 public sealed class TypeSafeClientTests
 {
+    [Fact]
+    public async Task RegistersInjectableTransientServiceWithHttpClientFactory()
+    {
+        var services = new ServiceCollection();
+        var handler = new RecordingHandler("{\"answers\":{\"result\":{\"type\":\"noul\",\"noul\":0.93}}}");
+        services.AddJevService("test-key").ConfigurePrimaryHttpMessageHandler(() => handler);
+
+        var registration = Assert.Single(services, x => x.ServiceType == typeof(IJevService));
+        Assert.Equal(ServiceLifetime.Transient, registration.Lifetime);
+        using var provider = services.BuildServiceProvider();
+        Assert.NotSame(provider.GetRequiredService<IJevService>(), provider.GetRequiredService<IJevService>());
+        Assert.NotNull(provider.GetRequiredService<IHttpClientFactory>());
+        var answer = await provider.GetRequiredService<IJevService>()
+            .Noul(new NoulRequest("Please call me today", "Is this urgent?"));
+        Assert.Equal(0.93, answer.Probability);
+        Assert.Equal("Bearer test-key", handler.Authorization);
+    }
+
     [Fact]
     public async Task NoulSendsTypedQuestionAndReturnsProbability()
     {
