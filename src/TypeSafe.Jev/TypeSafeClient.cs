@@ -19,7 +19,7 @@ public sealed class TypeSafeClient
     public async Task<JsonDocument> EvaluateAsync(object state, IReadOnlyDictionary<string, object> questions,
         string model = "jev-latest", CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(state);
+        if (state is null) throw new ArgumentNullException(nameof(state));
         if (questions is null || questions.Count == 0) throw new ArgumentException("At least one question is required.", nameof(questions));
         using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.typesafe.ai/v1/systemone")
         {
@@ -28,7 +28,7 @@ public sealed class TypeSafeClient
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
         using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         return await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }
