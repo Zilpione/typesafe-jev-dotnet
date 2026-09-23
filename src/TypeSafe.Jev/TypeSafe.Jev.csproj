@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>Zilpione.TypeSafe.Jev</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Zilpione</Authors>
+    <Description>Minimal .NET client for the TypeSafe System One API.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Zilpione/typesafe-jev-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
